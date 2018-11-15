@@ -13886,8 +13886,14 @@ module.exports = __webpack_require__(39);
 
 /***/ }),
 /* 12 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_crud__ = __webpack_require__(44);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_crud___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_crud__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_test__ = __webpack_require__(52);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_test___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__components_test__);
 
 /**
  * First we will load all of this project's JavaScript dependencies which
@@ -13907,7 +13913,7 @@ window.Vue = __webpack_require__(36);
  * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
  */
 
-Vue.component('crud', __webpack_require__(44));
+// Vue.component('crud', require('./components/crud.vue'));
 
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key)))
@@ -13918,8 +13924,14 @@ Vue.component('crud', __webpack_require__(44));
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
+
+
+
 var app = new Vue({
-  el: '#app'
+  el: '#app',
+  components: {
+    crud: __WEBPACK_IMPORTED_MODULE_0__components_crud___default.a
+  }
 });
 
 /***/ }),
@@ -47487,6 +47499,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     mounted: function mounted() {
@@ -47513,27 +47534,41 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             var _this2 = this;
 
             axios.post('/api/crud', this.cruds).then(function (res) {
-                _this2.crud.unshift(res.data);
+                _this2.crud.push(res.data);
                 _this2.cruds.name = '';
+                _this2.cruds.phone = '';
+                _this2.cruds.address = '';
             }).catch(function (err) {
                 console.log(err);
             });
         },
-        done: function done(cruds) {
-            axios.put('api/crud/' + cruds.id, {
-                completed: !cruds.completed
-            }).then(function (res) {
-                console.log('Name Already Checked');
+
+        // done(cruds) {
+        //     axios.put(`api/crud/${cruds.id}`, {
+        //         completed: !cruds.completed
+        //     })
+        //     .then((res) => {
+        //         console.log('Name Already Checked')
+        //     })
+        //     .catch((err) => {
+        //         console.log(err)
+        //     })
+        // },
+        edit: function edit(cruds) {
+            var _this3 = this;
+
+            axios.get('api/crud/' + cruds.id + '/edit').then(function (res) {
+                _this3.cruds.name = res.data.name;
             }).catch(function (err) {
                 console.log(err);
             });
         },
         remove: function remove(cruds) {
-            var _this3 = this;
+            var _this4 = this;
 
             axios.delete('api/crud/' + cruds.id).then(function (res) {
-                var crudsIndex = _this3.crud.indexOf(cruds);
-                _this3.crud.splice(crudsIndex, 1);
+                var crudsIndex = _this4.crud.indexOf(cruds);
+                _this4.crud.splice(crudsIndex, 1);
             }).catch(function (err) {
                 console.log(err);
             });
@@ -47567,7 +47602,7 @@ var render = function() {
                   }
                 ],
                 staticClass: "form-control",
-                attrs: { type: "text" },
+                attrs: { type: "text", placeholder: "Name" },
                 domProps: { value: _vm.cruds.name },
                 on: {
                   keydown: function($event) {
@@ -47584,6 +47619,68 @@ var render = function() {
                       return
                     }
                     _vm.$set(_vm.cruds, "name", $event.target.value)
+                  }
+                }
+              }),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.cruds.address,
+                    expression: "cruds.address"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: { type: "text", placeholder: "address" },
+                domProps: { value: _vm.cruds.address },
+                on: {
+                  keydown: function($event) {
+                    if (
+                      !("button" in $event) &&
+                      _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")
+                    ) {
+                      return null
+                    }
+                    return _vm.create($event)
+                  },
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.cruds, "address", $event.target.value)
+                  }
+                }
+              }),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.cruds.phone,
+                    expression: "cruds.phone"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: { type: "text", placeholder: "Phone" },
+                domProps: { value: _vm.cruds.phone },
+                on: {
+                  keydown: function($event) {
+                    if (
+                      !("button" in $event) &&
+                      _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")
+                    ) {
+                      return null
+                    }
+                    return _vm.create($event)
+                  },
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.cruds, "phone", $event.target.value)
                   }
                 }
               }),
@@ -47615,59 +47712,32 @@ var render = function() {
                       _c("div", { staticClass: "checkbox" }, [
                         _c("div", { staticClass: "row" }, [
                           _c("label", { staticClass: "col-md-9" }, [
-                            _c("input", {
-                              directives: [
-                                {
-                                  name: "model",
-                                  rawName: "v-model",
-                                  value: cruds.completed,
-                                  expression: "cruds.completed"
-                                }
-                              ],
-                              attrs: { type: "checkbox" },
-                              domProps: {
-                                checked: Array.isArray(cruds.completed)
-                                  ? _vm._i(cruds.completed, null) > -1
-                                  : cruds.completed
-                              },
-                              on: {
-                                click: function($event) {
-                                  _vm.done(cruds)
-                                },
-                                change: function($event) {
-                                  var $$a = cruds.completed,
-                                    $$el = $event.target,
-                                    $$c = $$el.checked ? true : false
-                                  if (Array.isArray($$a)) {
-                                    var $$v = null,
-                                      $$i = _vm._i($$a, $$v)
-                                    if ($$el.checked) {
-                                      $$i < 0 &&
-                                        _vm.$set(
-                                          cruds,
-                                          "completed",
-                                          $$a.concat([$$v])
-                                        )
-                                    } else {
-                                      $$i > -1 &&
-                                        _vm.$set(
-                                          cruds,
-                                          "completed",
-                                          $$a
-                                            .slice(0, $$i)
-                                            .concat($$a.slice($$i + 1))
-                                        )
-                                    }
-                                  } else {
-                                    _vm.$set(cruds, "completed", $$c)
-                                  }
-                                }
-                              }
-                            }),
-                            _vm._v(" " + _vm._s(cruds.name) + " ")
+                            _vm._v(
+                              "\n                                             " +
+                                _vm._s(cruds.name) +
+                                " - " +
+                                _vm._s(cruds.address) +
+                                " - " +
+                                _vm._s(cruds.name) +
+                                "\n                                         "
+                            )
                           ]),
                           _vm._v(" "),
                           _c("div", { staticClass: "text-right col-md-3" }, [
+                            _c(
+                              "button",
+                              {
+                                staticClass: "btn btn-sm btn-success",
+                                on: {
+                                  click: function($event) {
+                                    $event.preventDefault()
+                                    _vm.edit(cruds)
+                                  }
+                                }
+                              },
+                              [_vm._v("Edit")]
+                            ),
+                            _vm._v(" "),
                             _c(
                               "button",
                               {
@@ -47679,7 +47749,7 @@ var render = function() {
                                   }
                                 }
                               },
-                              [_vm._v("x")]
+                              [_vm._v("Hapus")]
                             )
                           ])
                         ])
@@ -48005,6 +48075,73 @@ module.exports = function listToStyles (parentId, list) {
   return styles
 }
 
+
+/***/ }),
+/* 52 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(45)
+/* script */
+var __vue_script__ = null
+/* template */
+var __vue_template__ = __webpack_require__(53)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/js/components/test.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-5b6abe5d", Component.options)
+  } else {
+    hotAPI.reload("data-v-5b6abe5d", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 53 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", {}, [_vm._v("\n    ini test\n")])
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-5b6abe5d", module.exports)
+  }
+}
 
 /***/ })
 /******/ ]);

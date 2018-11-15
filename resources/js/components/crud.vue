@@ -6,22 +6,32 @@
                     <div class="card-header">Sample Crud</div>
 
                     <div class="card-body">
+
                         <div class="input-group">
-                            <input type="text" class="form-control"
-                            v-model="cruds.name" @keydown.enter="create">
+                            <input type="text" class="form-control" v-model="cruds.name" @keydown.enter="create" placeholder="Name" >
+                            <input type="text" class="form-control" v-model="cruds.address" @keydown.enter="create" placeholder="address" >
+                            <input type="text" class="form-control" v-model="cruds.phone" @keydown.enter="create" placeholder="Phone">
                             <span class="input-group-btn">
                                 <button type="button" class="btn btn-success" name="button" @click="create"> Add </button>
-                            </span>   
+                            </span>
                         </div>
+                        <!-- template for the modal component -->
+
+
+
                         <br>
                         <div class="crud-list">
                             <ul class="list-unstyled">
                                 <li v-for="cruds in crud" :key='cruds.id' :class="{ done: cruds.completed }">
                                     <div class="checkbox">
                                         <div class="row">
-                                            <label class="col-md-9"> <input type="checkbox" v-model="cruds.completed" @click="done(cruds)"> {{ cruds.name }} </label>
+                                            <label class="col-md-9">
+                                                <!-- <input type="checkbox" v-model="cruds.completed" @click="done(cruds)"> -->
+                                                 {{ cruds.name }} - {{ cruds.address }} - {{ cruds.name }}
+                                             </label>
                                             <div class="text-right col-md-3">
-                                                <button @click.prevent="remove(cruds)" class="btn btn-sm btn-danger">x</button >
+                                                <button @click.prevent="edit(cruds)" class="btn btn-sm btn-success">Edit</button >
+                                                <button @click.prevent="remove(cruds)" class="btn btn-sm btn-danger">Hapus</button >
                                             </div>
                                         </div>
                                     </div>
@@ -34,7 +44,6 @@
         </div>
     </div>
 </template>
-
 <script>
     export default {
         mounted() {
@@ -44,7 +53,6 @@
             return {
                 crud: [],
                 cruds : {
-
                 }
             }
         },
@@ -60,19 +68,29 @@
             create(){
                 axios.post('/api/crud', this.cruds)
                 .then((res) =>{
-                    this.crud.unshift(res.data)
+                    this.crud.push(res.data)
                     this.cruds.name = ''
+                    this.cruds.phone = ''
+                    this.cruds.address = ''
                 })
                 .catch((err) => {
                     console.log(err)
                 })
             },
-            done(cruds) {
-                axios.put(`api/crud/${cruds.id}`, {
-                    completed: !cruds.completed
-                })
-                .then((res) => {
-                    console.log('Name Already Checked')
+            // done(cruds) {
+            //     axios.put(`api/crud/${cruds.id}`, {
+            //         completed: !cruds.completed
+            //     })
+            //     .then((res) => {
+            //         console.log('Name Already Checked')
+            //     })
+            //     .catch((err) => {
+            //         console.log(err)
+            //     })
+            // },
+            edit(cruds) {
+                axios.get(`api/crud/${cruds.id}/edit`).then((res) => {
+                    this.cruds.name = res.data.name
                 })
                 .catch((err) => {
                     console.log(err)
@@ -88,7 +106,6 @@
                     console.log(err)
                 })
             }
-
         }
     }
 </script>

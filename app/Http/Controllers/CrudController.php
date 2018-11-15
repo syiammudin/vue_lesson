@@ -21,6 +21,12 @@ class CrudController extends Controller
         return $crud ;
     }
 
+    public function Edit($id)
+    {
+        $data = Crud::find($id);
+        return $data ;
+    }
+
     public function update(Request $request, $id)
     {
         $crud = Crud::find($id) ;
