@@ -11,7 +11,7 @@
                             v-model="cruds.name" @keydown.enter="create">
                             <span class="input-group-btn">
                                 <button type="button" class="btn btn-success" name="button" @click="create"> Add </button>
-                            </span>
+                            </span>   
                         </div>
                         <br>
                         <div class="crud-list">
