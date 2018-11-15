@@ -1,5 +1,9 @@
 <?php
 
+Route::resource('/crud','CrudController', [
+    'except' => ['create','edit','show']
+]) ;
+
 use Illuminate\Http\Request;
 
 /*
