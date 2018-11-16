@@ -11,8 +11,9 @@
     </head>
     <body>
         <div class="container" id="app">
-            <crud/>
-            <test/>
+            <blog></blog>
+            <!-- <crud/>
+            <test/> -->
         </div>
 
         <script src="{{ asset('js/app.js') }}"></script>

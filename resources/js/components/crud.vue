@@ -6,28 +6,24 @@
                     <div class="card-header">Sample Crud</div>
 
                     <div class="card-body">
-
                         <div class="input-group">
-                            <input type="text" class="form-control" v-model="cruds.name" @keydown.enter="create" placeholder="Name" >
-                            <input type="text" class="form-control" v-model="cruds.address" @keydown.enter="create" placeholder="address" >
-                            <input type="text" class="form-control" v-model="cruds.phone" @keydown.enter="create" placeholder="Phone">
+                            <input type="text" class="form-control" v-model="cruds.name" placeholder="Name" >
+                            <input type="text" class="form-control" v-model="cruds.address" placeholder="address" >
+                            <input type="text" class="form-control" v-model="cruds.phone" placeholder="Phone">
                             <span class="input-group-btn">
-                                <button type="button" class="btn btn-success" name="button" @click="create"> Add </button>
+                                <button type="button" class="btn btn-success" name="button" @click="cruds.id === undefined ? create : update(cruds)"> {{cruds.id === undefined ? 'Add' : 'Update'}} </button>
                             </span>
                         </div>
                         <!-- template for the modal component -->
-
-
-
                         <br>
-                        <div class="crud-list">
+                        <div class="crud">
                             <ul class="list-unstyled">
                                 <li v-for="cruds in crud" :key='cruds.id' :class="{ done: cruds.completed }">
                                     <div class="checkbox">
                                         <div class="row">
                                             <label class="col-md-9">
                                                 <!-- <input type="checkbox" v-model="cruds.completed" @click="done(cruds)"> -->
-                                                 {{ cruds.name }} - {{ cruds.address }} - {{ cruds.name }}
+                                                 {{ cruds.name }} - {{ cruds.address }} - {{ cruds.phone }}
                                              </label>
                                             <div class="text-right col-md-3">
                                                 <button @click.prevent="edit(cruds)" class="btn btn-sm btn-success">Edit</button >
@@ -39,6 +35,7 @@
                             </ul>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>
@@ -53,6 +50,7 @@
             return {
                 crud: [],
                 cruds : {
+
                 }
             }
         },
@@ -68,7 +66,7 @@
             create(){
                 axios.post('/api/crud', this.cruds)
                 .then((res) =>{
-                    this.crud.push(res.data)
+                    this.crud.unshift(res.data)
                     this.cruds.name = ''
                     this.cruds.phone = ''
                     this.cruds.address = ''
@@ -89,8 +87,16 @@
             //     })
             // },
             edit(cruds) {
-                axios.get(`api/crud/${cruds.id}/edit`).then((res) => {
-                    this.cruds.name = res.data.name
+                this.cruds = cruds;
+            },
+            update(cruds) {
+                axios.put(`api/crud/${cruds.id}`,{
+                    cruds: cruds.name ,
+                    phone: cruds.phone ,
+                    address: cruds.address
+                })
+                .then((res) => {
+
                 })
                 .catch((err) => {
                     console.log(err)

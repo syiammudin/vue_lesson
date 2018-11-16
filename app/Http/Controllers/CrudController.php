@@ -30,8 +30,7 @@ class CrudController extends Controller
     public function update(Request $request, $id)
     {
         $crud = Crud::find($id) ;
-        $crud->completed = $request->completed ;
-        $crud->update() ;
+        $crud->update($request->all()) ;
 
         return $crud ;
     }

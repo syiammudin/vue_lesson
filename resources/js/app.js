@@ -30,10 +30,11 @@ window.Vue = require('vue');
 
 import crud from './components/crud'
 import test from './components/test'
+import blog from './components/blog'
 
 const app = new Vue({
     el: '#app',
     components: {
-        crud
+        crud, blog
     }
 });
