@@ -10,7 +10,7 @@ class BlogController extends Controller
 
     public function index()
     {
-        return Blog::paginate(5);
+        return Blog::orderBy('id','desc')->paginate(5);
     }
 
     public function store(Request $request)
@@ -33,8 +33,9 @@ class BlogController extends Controller
 
     public function destroy($id)
     {
-        Blog::find($id)->delete() ;
+         Blog::find($id)->delete() ;
+        $blog = Blog::get()->count() % 5;
 
-        return 204 ;
+        return $blog ;
     }
 }

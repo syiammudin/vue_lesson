@@ -48211,7 +48211,7 @@ exports = module.exports = __webpack_require__(12)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -48260,6 +48260,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     mounted: function mounted() {
@@ -48268,6 +48275,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     data: function data() {
         return {
             blogs: {},
+            data: [],
             insert: {}
         };
     },
@@ -48280,6 +48288,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
             axios.get('api/blog?page=' + page).then(function (res) {
                 _this.blogs = res.data;
+                _this.data = res.data;
+                _this.hal = page;
             }).catch(function (err) {
                 console.log(err);
             });
@@ -48288,7 +48298,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             var _this2 = this;
 
             axios.post('api/blog', this.insert).then(function (res) {
-                _this2.blogs.unshift(res.data);
+                // this.blogs.unshift(res.data)
+                _this2.ambilData();
                 _this2.insert.title = '';
                 _this2.insert.content = '';
             }).catch(function (err) {
@@ -48297,12 +48308,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         edit: function edit(blog) {
             this.insert = JSON.parse(JSON.stringify(blog));
-            // axios.get(`api/blog/${blog.id}/edit`).then((res) => {
-            //     this.insert = res.data
-            // })
-            // .catch((err) => {
-            //     console.log(err)
-            // })
         },
         update: function update(insert) {
             var _this3 = this;
@@ -48311,21 +48316,32 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 _this3.insert.id = 0;
                 _this3.insert.title = '';
                 _this3.insert.content = '';
-                _this3.ambilData();
+                _this3.ambilData(_this3.hal);
                 // alert('update success')
             }).catch(function (err) {
                 console.log(err);
             });
         },
-        hapus: function hapus(blog) {
+        hapus: function hapus(blog, n) {
             var _this4 = this;
 
             axios.delete('api/blog/' + blog.id).then(function (res) {
-                var BlogIndex = _this4.blogs.indexOf(blog);
-                _this4.blogs.splice(BlogIndex, 1);
+                var hitung = (_this4.hal - 1) * 5;
+                var sisa = _this4.data.total - hitung;
+                if (sisa > 1) {
+                    var hal = _this4.hal;
+                } else {
+                    var hal = _this4.hal - 1;
+                }
+                _this4.ambilData(hal);
             }).catch(function (err) {
                 console.log(err);
             });
+        },
+        cancel: function cancel() {
+            this.insert.title = '';
+            this.insert.content = '';
+            this.insert.id = 0;
         }
     }
 });
@@ -48394,19 +48410,47 @@ var render = function() {
                 }
               }),
               _vm._v(" "),
-              _c(
-                "button",
-                {
-                  staticClass: "btn input-group-btn btn-primary",
-                  attrs: { type: "button" },
-                  on: {
-                    click: function($event) {
-                      !_vm.insert.id ? _vm.save() : _vm.update(_vm.insert)
-                    }
-                  }
-                },
-                [_vm._v(_vm._s(!_vm.insert.id ? "Add " : "Update "))]
-              )
+              !_vm.insert.id
+                ? _c("span", [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn input-group-btn btn-primary",
+                        attrs: { type: "button" },
+                        on: { click: _vm.save }
+                      },
+                      [_vm._v("Add")]
+                    )
+                  ])
+                : _c("span", [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn input-group-btn btn-primary",
+                        attrs: { type: "button" },
+                        on: {
+                          click: function($event) {
+                            _vm.update(_vm.insert)
+                          }
+                        }
+                      },
+                      [_vm._v("Update")]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn input-group-btn btn-warning",
+                        attrs: { type: "button" },
+                        on: {
+                          click: function($event) {
+                            _vm.cancel()
+                          }
+                        }
+                      },
+                      [_vm._v("Cancel")]
+                    )
+                  ])
             ]),
             _vm._v(" "),
             _c(
@@ -48445,13 +48489,55 @@ var render = function() {
                           on: {
                             click: function($event) {
                               $event.preventDefault()
-                              _vm.hapus(blog)
+                              _vm.hapus(blog, n + 1)
                             }
                           }
                         },
                         [_vm._v(" X ")]
                       )
-                    ])
+                    ]),
+                    _vm._v(" "),
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.hal,
+                          expression: "hal"
+                        }
+                      ],
+                      attrs: { type: "hidden" },
+                      domProps: { value: _vm.hal },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.hal = $event.target.value
+                        }
+                      }
+                    }),
+                    _vm._v(" "),
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.data.total,
+                          expression: "data.total"
+                        }
+                      ],
+                      attrs: { type: "hidden" },
+                      domProps: { value: _vm.data.total },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(_vm.data, "total", $event.target.value)
+                        }
+                      }
+                    })
                   ])
                 })
               ],
