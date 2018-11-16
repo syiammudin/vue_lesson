@@ -10,10 +10,16 @@
 
     </head>
     <body>
-        <div class="container" id="app">
-            <blog></blog>
-            <!-- <crud/>
-            <test/> -->
+
+        <div class="container" id="app" style="border:1px solid;">
+            <div class="row">
+                <div class="col-lg-12">
+                    <blog></blog>
+                </div>
+                <!-- <div class="col-lg-6">
+                    <paginate></paginate>
+                </div> -->
+            </div>
         </div>
 
         <script src="{{ asset('js/app.js') }}"></script>

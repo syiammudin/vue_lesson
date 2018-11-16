@@ -10,7 +10,7 @@ class BlogController extends Controller
 
     public function index()
     {
-        return Blog::orderBy('id','desc')->get() ;
+        return Blog::paginate(5);
     }
 
     public function store(Request $request)

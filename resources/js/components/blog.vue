@@ -1,7 +1,6 @@
 <template lang="html">
-    <div class="container">
         <div class="row justify-content-center">
-            <div class="col-md-8">
+            <div class="col-md-12">
                 <div class="card card-default">
                     <div class="card-header">
                         Blog Using Vue
@@ -20,7 +19,7 @@
                                 <th>Content</th>
                                 <th>Action</th>
                             </tr>
-                            <tr v-for="blog, n in blogs">
+                            <tr v-for="blog, n in blogs.data" :key="blog.id">
                                 <td>{{ n+1 }}</td>
                                 <td>{{ blog.title }}</td>
                                 <td>{{ blog.content }}</td>
@@ -30,11 +29,11 @@
                                 </td>
                             </tr>
                         </table>
+                            <pagination :data="blogs" @pagination-change-page="ambilData"></pagination>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 </template>
 
 <script>
@@ -44,15 +43,15 @@ export default {
     },
     data(){
         return {
-            blogs: [],
+            blogs: {},
             insert : {
 
             }
         }
     },
     methods: {
-        ambilData(){
-            axios.get('api/blog').then((res) => {
+        ambilData(page = 1){
+            axios.get('api/blog?page=' + page).then((res) => {
                 this.blogs = res.data
             })
             .catch((err) =>{

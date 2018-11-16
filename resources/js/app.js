@@ -31,10 +31,11 @@ window.Vue = require('vue');
 import crud from './components/crud'
 import test from './components/test'
 import blog from './components/blog'
-
+import paginate from './components/paginate'
+Vue.component('pagination', require('laravel-vue-pagination'));
 const app = new Vue({
     el: '#app',
     components: {
-        crud, blog
+        crud, blog, paginate
     }
 });
