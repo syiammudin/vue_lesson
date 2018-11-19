@@ -13,4 +13,8 @@
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('home');
+
+Route::get('/crud_modal', function(){
+    return view('crud_modal');
+})->name('crud_modal');

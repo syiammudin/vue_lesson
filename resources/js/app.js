@@ -32,10 +32,14 @@ import crud from './components/crud'
 import test from './components/test'
 import blog from './components/blog'
 import paginate from './components/paginate'
+import crudmodal from './components/crudmodal'
+import VModal from 'vue-js-modal'
+
+Vue.use(VModal, { dialog: true, dynamic: true }) 
 Vue.component('pagination', require('laravel-vue-pagination'));
 const app = new Vue({
     el: '#app',
     components: {
-        crud, blog, paginate
+        crud, blog, paginate, crudmodal ,
     }
 });

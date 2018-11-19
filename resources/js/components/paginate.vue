@@ -1,44 +1,50 @@
-<template lang="html">
-    <div class="card">
-        <div class="card-header">
-            Sample Pagination
+    <template lang="html">
+        <div class="justify-content">
+            <modal name="hello-world" class="card" height="auto">
+                    <div class="card-header">
+                        Form data
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <div class="row">
+                                <label for="" class="col-md-3">Title</label>
+                                <div class="col-md-9">
+                                    <input type="text" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <label for="" class="col-md-3">Content</label>
+                                <div class="col-md-9">
+                                    <input type="text" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="card-footer">
+                        <button >Save</button>
+                    </div>
+            </modal>
+            <v-dialog />
+            <modals-container/>
+            <button type="button" @click="show">show</button>
         </div>
-        <div class="card-body">
-            <ul>
-                <li v-for="post in laravelData.data" :key="post.id">{{ post.title }}</li>
-            </ul>
+    </template>
 
-            <pagination :data="laravelData" @pagination-change-page="getResults"></pagination>
-        </div>
-    </div>
-</template>
+    <script>
+    export default {
+        methods: {
+          show () {
+            this.$modal.show('hello-world');
+          },
+          hide () {
+            this.$modal.hide('hello-world');
+          }
+        }
+    }
+    </script>
 
-<script>
-export default {
-    data() {
-		return {
-			// Our data object that holds the Laravel paginator data
-			laravelData: {},
-		}
-	},
-
-	mounted() {
-		// Fetch initial results
-		this.getResults();
-	},
-
-	methods: {
-		// Our method to GET results from a Laravel endpoint
-		getResults(page = 1) {
-			axios.get('api/blog?page=' + page)
-				.then(response => {
-					this.laravelData = response.data;
-				});
-		}
-	}
-
-}
-</script>
-
-<style lang="css">
-</style>
+    <style lang="css">
+    </style>

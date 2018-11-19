@@ -7,6 +7,10 @@ Route::resource('/crud','CrudController', [
 Route::resource('/blog','BlogController', [
     'except' => ['create','show']
 ]);
+Route::resource('/crud_modal','CrudModalController', [
+    'except' => ['create','show']
+]);
+
 
 use Illuminate\Http\Request;
 
